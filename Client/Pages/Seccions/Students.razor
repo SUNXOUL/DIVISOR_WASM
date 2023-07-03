@@ -1,0 +1,45 @@
+@page "/Students"
+@*@inject StudentsBLL StudentBLL*@
+
+<div class="form-control border-0">
+    <input type="text" class="form-control" placeholder="Search">
+    <br>
+    <H2 class="d-flex justify-content-center">STUDENTS</H2>
+    <div class="d-flex align-items-center">
+        <button type="button" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-primary rounded-pill m-1 ">New</button>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Add Student</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+        
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn  d-flex btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-control p-3 border-0 rounded">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
