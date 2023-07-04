@@ -39,7 +39,7 @@ namespace Server.Controllers
         }
 
         [HttpPatch]
-        public async Task<ActionResult<ServiceResponse<Boolean>>> Shuffle(Team Team)
+        public async Task<ActionResult<ServiceResponse<Boolean>>> Shuffle()
         {
             var result = await TeamServices.Shuffle();
             return Ok(result);

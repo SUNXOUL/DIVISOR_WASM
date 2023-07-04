@@ -17,7 +17,7 @@ namespace DIVISOR_WASM.Server.Services.TeamService
         public async Task<ServiceResponse<Team>> GetTeamAsync(int Id)
         {
             var response = new ServiceResponse<Team>();
-            var Team = await _contexto.Teams.Include(o => o.TeamId).AsNoTracking().SingleOrDefaultAsync(o => o.TeamId == Id); ;
+            var Team = await _contexto.Teams.Include(o => o.StudentList).AsNoTracking().SingleOrDefaultAsync(o => o.TeamId == Id);
             if (Team == null)
             {
                 response.Success = false;
@@ -144,6 +144,11 @@ namespace DIVISOR_WASM.Server.Services.TeamService
             var response = new ServiceResponse<Boolean>();
             try
             {
+                foreach (var team in Teams)
+                {
+                    team.StudentList = new List<Student>();
+                }
+
                 while (Students.Count() > 0)
                 {
                     foreach (var team in Teams)
@@ -154,10 +159,12 @@ namespace DIVISOR_WASM.Server.Services.TeamService
                             student = Students[index];
                             team.StudentList.Add(student);
                             Students.Remove(student);
+                            _contexto.Teams.Update(team);
                         }
                     }
                 }
-                response.Data = true;
+                var guardo = await _contexto.SaveChangesAsync() > 0;
+                response.Data = guardo;
             }
             catch (Exception ex)
             {
