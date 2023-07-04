@@ -1,8 +1,18 @@
 using Microsoft.AspNetCore.ResponseCompression;
-
+using DIVISOR_WASM.Server.Services.StudentService;
+using DIVISOR_WASM.Server.Services.TeamService;
+using Microsoft.EntityFrameworkCore;
+using DIVISOR_WASM.Server.DAL;
 var builder = WebApplication.CreateBuilder(args);
 
+//Contexto
+var ConStr = builder.Configuration.GetConnectionString("ConStr");
+builder.Services.AddDbContext<Contexto>(Options => Options.UseSqlite(ConStr));
+
 // Add services to the container.
+
+builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
