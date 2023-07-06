@@ -34,7 +34,7 @@ namespace DIVISOR_WASM.Server.Services.TeamService
         public async Task<ServiceResponse<List<Team>>> GetAllTeamsAsync()
         {
             var response = new ServiceResponse<List<Team>>();
-            response.Data = await _contexto.Teams.ToListAsync();
+            response.Data = await _contexto.Teams.Include(o => o.StudentList).ToListAsync();
             return response;
         }
 
