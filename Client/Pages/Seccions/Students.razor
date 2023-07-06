@@ -1,6 +1,6 @@
 @page "/Students"
-@*@inject StudentsBLL StudentBLL*@
-
+@inject IStudentService StudentService
+\
 <div class="form-control border-0">
     <input type="text" class="form-control" placeholder="Search">
     <br>
@@ -31,15 +31,19 @@
     </div>
 </div>
 
-<div class="form-control p-3 border-0 rounded">
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+<div class="form-control border-0 d-flex flex-wrap">
+    @foreach(var student in StudentList )
+    {
+        <div class="p-1">
+            <span class="badge bg-success">@student.Name</span>
+        </div>
+    }
+    
 </div>
+
+@code{
+
+    public List<Student> StudentList = new List<Student>();
+
+}
+

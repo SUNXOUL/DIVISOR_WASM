@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Shared\DIVISOR_WASM.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\StudentService\" />
+  </ItemGroup>
+
 </Project>
