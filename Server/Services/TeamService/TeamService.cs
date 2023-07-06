@@ -86,7 +86,7 @@ namespace DIVISOR_WASM.Server.Services.TeamService
             {
                 if (Team != null)
                 {
-                    _contexto.Update(Team);
+                    _contexto.Teams.Update(Team);
                     var guardo = await _contexto.SaveChangesAsync() > 0;
                     _contexto.Entry(Team).State = EntityState.Detached;
                     response.Data = Team;
@@ -114,7 +114,7 @@ namespace DIVISOR_WASM.Server.Services.TeamService
             {
                 if (Team != null)
                 {
-                    _contexto.Remove(Team);
+                    _contexto.Teams.Remove(Team);
                     bool guardado = await _contexto.SaveChangesAsync() > 0;
                     response.Data = Team;
                     response.Success = guardado;
