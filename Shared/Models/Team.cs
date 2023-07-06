@@ -11,7 +11,7 @@ namespace Shared.Models
         [Required(ErrorMessage = "The name of the team is obligatory")]
         public string? Name { get; set; }
 
-        [ForeignKey("StudentId")]
-        public List<Student> StudentList { get; set; } 
-    } 
+        [ForeignKey("TeamId")]
+        public List<Student> StudentList { get; set; } = new List<Student>();
+    }
 }
