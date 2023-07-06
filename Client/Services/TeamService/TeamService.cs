@@ -48,5 +48,14 @@ namespace DIVISOR_WASM.Client.Services.TeamService
             response.Data = result;
             return response;
         }
+
+        public async Task<ServiceResponse<Boolean>> Shuffle()
+        {
+            var post = await _http.PatchAsync("api/Team",null);
+            var result = true;
+            var response = new ServiceResponse<Boolean>();
+            response.Data = result;
+            return response;
+        }
     }
 }

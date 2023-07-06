@@ -54,5 +54,6 @@ namespace DIVISOR_WASM.Client.Services.StudentService
 
             return response;
         }
+
     }
 }

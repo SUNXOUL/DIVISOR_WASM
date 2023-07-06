@@ -7,7 +7,7 @@
     <H2 class="d-flex justify-content-center">TEAMS</H2>
     <div class="d-flex align-items-center">
         <button type="button" class="btn btn-primary rounded-pill m-1 " data-bs-toggle="modal" data-bs-target="#myModal">New</button>
-        <button type="button" class="btn btn-success rounded-pill m-1">Shuffle</button>
+        <button type="button" class="btn btn-success rounded-pill m-1" @onclick="Shuffle">Shuffle</button>
     </div>
 </div>
 
@@ -15,20 +15,80 @@
 <div class="modal" id="myModal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
+            <EditForm Model="team" OnValidSubmit="() => Save()">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Team</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-            <div class="modal-header">
-                <h4 class="modal-title">Add Team</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
+                <div class="modal-body">
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn  d-flex btn-success">Save</button>
-            </div>
+                    <div class="mb-3">
+                        <label>Name</label>
+                        <InputText @bind-Value="team.Name" class="form-control" />
+                        <ValidationMessage For="@(() => team.Name)" />
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn  d-flex btn-success">Save</button>
+                </div>
+            </EditForm>
         </div>
     </div>
 </div>
+<hr/>
+<div class="form-control border-0 d-flex flex-wrap">
+    @foreach (var team in TeamService.TeamList)
+    {
+        <div class="p-1">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">@team.Name  <button class="bg-transparent border-0 text-body" @onclick="@(()=>Delete(@team.TeamId))">X</button></h4>
+                    <hr/>
+                    @foreach(var student in team.StudentList)
+                    {
+                        <p class="card-text">@student.Name</p>
+                    }
+                   
+                </div>
+            </div>
+        </div>
+    }
 
-<div class="form-control p-3 rounded border-0">
 </div>
+
+@code{
+    public Team team { get; set; } = new Team();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await TeamService.GetList();
+    }
+
+    public async Task Save()
+    {
+        await TeamService.Save(team);
+        New();
+        await TeamService.GetList();
+    }
+
+    public void New()
+    {
+        team = new Team();
+    }
+
+    public async Task Delete(int TeamId)
+    {
+        await TeamService.Delete(TeamId);
+        await TeamService.GetList();
+    }
+
+    public async Task Shuffle()
+    {
+        await TeamService.Shuffle();
+        await TeamService.GetList();
+    }
+}

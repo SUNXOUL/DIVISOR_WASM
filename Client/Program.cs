@@ -1,9 +1,12 @@
+global using System.Net.Http.Json;
+global using Shared.Models;
+
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using DIVISOR_WASM.Client;
 using DIVISOR_WASM.Client.Services.TeamService;
 using DIVISOR_WASM.Client.Services.StudentService;
-using Shared.Models;
+
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

@@ -9,5 +9,6 @@ namespace DIVISOR_WASM.Client.Services.TeamService
         Task<ServiceResponse<Team>> Save(Team Team);
         Task GetList();
         Task<ServiceResponse<string>> Delete(int Id);
+        Task<ServiceResponse<Boolean>> Shuffle();
     }
 }

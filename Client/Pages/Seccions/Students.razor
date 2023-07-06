@@ -1,6 +1,6 @@
 @page "/Students"
 @inject IStudentService StudentService
-\
+
 <div class="form-control border-0">
     <input type="text" class="form-control" placeholder="Search">
     <br>
@@ -14,36 +14,65 @@
 <div class="modal" id="myModal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
+            <EditForm Model="student" OnValidSubmit="() => Save()">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Student</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-            <div class="modal-header">
-                <h4 class="modal-title">Add Student</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+                <div class="modal-body">
 
-            <div class="modal-body">
-        
-            </div>
+                    <div class="mb-3">
+                        <label>Name</label>
+                        <InputText @bind-Value="student.Name" class="form-control" />
+                        <ValidationMessage For="@(() => student.Name)" />
+                    </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn  d-flex btn-success">Save</button>
-            </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn  d-flex btn-success">Save</button>
+                </div>
+            </EditForm>
         </div>
     </div>
 </div>
-
+<hr />
 <div class="form-control border-0 d-flex flex-wrap">
-    @foreach(var student in StudentList )
+    @foreach(var student in StudentService.StudentList )
     {
-        <div class="p-1">
-            <span class="badge bg-success">@student.Name</span>
+        <div class="p-1 border-1">
+            <h5><span class="badge border border-gray text-body ">@student.Name <button class="bg-transparent border-0 text-body" @onclick="@(()=>Delete(@student.StudentId))">X</button></span></h5>
         </div>
     }
     
 </div>
 
 @code{
+    public Student student {get;set;} = new Student();
+    protected override async Task OnInitializedAsync()
+    {
+        await StudentService.GetList();
+    }
 
-    public List<Student> StudentList = new List<Student>();
+    public async Task Save()
+    {
+        await StudentService.Save(student);
+        New();
+        await StudentService.GetList();
+    }
+
+    public void New()
+    {
+        student = new Student();
+    }
+
+    public async Task Delete(int StudentId)
+    {
+        await StudentService.Delete(StudentId);
+        await StudentService.GetList();
+    }
 
 }
 
