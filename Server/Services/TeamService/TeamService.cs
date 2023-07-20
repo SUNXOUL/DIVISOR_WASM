@@ -109,11 +109,12 @@ namespace DIVISOR_WASM.Server.Services.TeamService
         public async Task<ServiceResponse<Team>> Delete(int TeamId)
         {
             var response = new ServiceResponse<Team>();
-            var Team = await _contexto.Teams.FindAsync(TeamId);
+            var Team = await _contexto.Teams.Include(t => t.StudentList).SingleOrDefaultAsync(t => t.TeamId == TeamId);
             try
             {
                 if (Team != null)
                 {
+                    Team.StudentList = new List<Student>();
                     _contexto.Teams.Remove(Team);
                     bool guardado = await _contexto.SaveChangesAsync() > 0;
                     response.Data = Team;

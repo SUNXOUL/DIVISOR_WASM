@@ -2,7 +2,7 @@
 @inject ITeamService TeamService
 
 <div class="form-control border-0">
-    <input type="text" class="form-control" placeholder="Search">
+    <input type="text" class="form-control" @oninput=@(args => OnChange(args.Value.ToString())) placeholder="Search">
     <br>
     <H2 class="d-flex justify-content-center">TEAMS</H2>
     <div class="d-flex align-items-center">
@@ -43,26 +43,30 @@
 <div class="form-control border-0 d-flex flex-wrap">
     @foreach (var team in TeamService.TeamList)
     {
-        <div class="p-1">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">@team.Name  <button class="bg-transparent border-0 text-body" @onclick="@(()=>Delete(@team.TeamId))">X</button></h4>
-                    <hr/>
-                    @foreach(var student in team.StudentList)
-                    {
-                        <p class="card-text">@student.Name</p>
-                    }
-                   
+        if(team.Name.ToLower().Contains(Search.ToLower()))
+        {
+            <div class="p-1">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">@team.Name  <button class="bg-transparent border-0 text-body" @onclick="@(()=>Delete(@team.TeamId))">X</button></h4>
+                        <hr/>
+                        @foreach(var student in team.StudentList)
+                        {
+                            <p class="card-text">@student.Name</p>
+                        }
+                    
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     }
 
 </div>
 
 @code{
     public Team team { get; set; } = new Team();
-
+    public string Search {get;set;} = "";
+    
     protected override async Task OnInitializedAsync()
     {
         await TeamService.GetList();
@@ -73,6 +77,11 @@
         await TeamService.Save(team);
         New();
         await TeamService.GetList();
+    }
+
+    void OnChange(string value)
+    {
+        Search=value;
     }
 
     public void New()

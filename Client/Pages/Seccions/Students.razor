@@ -2,7 +2,7 @@
 @inject IStudentService StudentService
 
 <div class="form-control border-0">
-    <input type="text" class="form-control" placeholder="Search">
+    <input type="text" class="form-control" @oninput=@(args => OnChange(args.Value.ToString())) placeholder="Search">
     <br>
     <H2 class="d-flex justify-content-center">STUDENTS</H2>
     <div class="d-flex align-items-center">
@@ -42,15 +42,18 @@
 <div class="form-control border-0 d-flex flex-wrap">
     @foreach(var student in StudentService.StudentList )
     {
-        <div class="p-1 border-1">
-            <h5><span class="badge border border-gray text-body ">@student.Name <button class="bg-transparent border-0 text-body" @onclick="@(()=>Delete(@student.StudentId))">X</button></span></h5>
-        </div>
+        if(student.Name.ToLower().Contains(Search.ToLower())){
+            <div class="p-1 border-1">
+                <h5><span class="badge border border-gray text-body ">@student.Name <button class="bg-transparent border-0 text-body" @onclick="@(()=>Delete(@student.StudentId))">X</button></span></h5>
+            </div>
+        }
     }
     
 </div>
 
 @code{
     public Student student {get;set;} = new Student();
+    public string Search {get;set;} = "";
     protected override async Task OnInitializedAsync()
     {
         await StudentService.GetList();
@@ -66,6 +69,11 @@
     public void New()
     {
         student = new Student();
+    }
+
+    void OnChange(string value)
+    {
+        Search=value;
     }
 
     public async Task Delete(int StudentId)
