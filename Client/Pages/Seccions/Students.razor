@@ -6,7 +6,8 @@
     <br>
     <H2 class="d-flex justify-content-center">STUDENTS</H2>
     <div class="d-flex align-items-center">
-        <button type="button" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-primary rounded-pill m-1 ">New</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#myModal"
+            class="btn btn-primary rounded-pill m-1 ">New</button>
     </div>
 </div>
 
@@ -29,6 +30,10 @@
                         <ValidationMessage For="@(() => student.Name)" />
                     </div>
 
+                    <div class="mb-3">
+                        <InputCheckbox @bind-Value="IsMany" class="form-check-input"/>
+                        <label class="form-check-label" for="flexCheckChecked">Is Many</label>
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -40,20 +45,24 @@
 </div>
 <hr />
 <div class="form-control border-0 d-flex flex-wrap">
-    @foreach(var student in StudentService.StudentList )
+    @foreach (var student in StudentService.StudentList)
     {
-        if(student.Name.ToLower().Contains(Search.ToLower())){
+        if (student.Name.ToLower().Contains(Search.ToLower()))
+        {
             <div class="p-1 border-1">
-                <h5><span class="badge border border-gray text-body ">@student.Name <button class="bg-transparent border-0 text-body" @onclick="@(()=>Delete(@student.StudentId))">X</button></span></h5>
+                <h5><span class="badge border border-gray text-body ">@student.Name <button
+                            class="bg-transparent border-0 text-body"
+                        @onclick="@(()=>Delete(@student.StudentId))">X</button></span></h5>
             </div>
         }
     }
-    
+
 </div>
 
-@code{
-    public Student student {get;set;} = new Student();
-    public string Search {get;set;} = "";
+@code {
+    public Student student { get; set; } = new Student();
+    public string Search { get; set; } = "";
+    public bool IsMany { get; set; }
     protected override async Task OnInitializedAsync()
     {
         await StudentService.GetList();
@@ -61,9 +70,24 @@
 
     public async Task Save()
     {
-        await StudentService.Save(student);
+        if (!IsMany)
+            await StudentService.Save(student);
+        else
+            await SaveMany();
+
         New();
         await StudentService.GetList();
+    }
+
+    private async Task SaveMany()
+    {
+        var names = student.Name!.Split(",");
+        foreach (var name in names)
+        {
+            await StudentService.Save(new Student {
+                Name = name.Trim()
+            });
+        }
     }
 
     public void New()
@@ -73,7 +97,7 @@
 
     void OnChange(string value)
     {
-        Search=value;
+        Search = value;
     }
 
     public async Task Delete(int StudentId)
